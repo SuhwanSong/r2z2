@@ -8,7 +8,7 @@
 
 ## Environment
 - Ubuntu 18.04 64bit
-- 
+
 ## Setup
 
 The bash file `setup.sh` will install and download all of dependencies for r2z2.
@@ -19,9 +19,6 @@ $ ./setup.sh
 
 ## Usage
 
-- Seed Generation
-```
-```
 
 - Change Detector
 ```
@@ -36,6 +33,11 @@ python3 src/bisector.py -i [candidate_output_dir] -o [bisect_output_dir]
 ```
 - Regression Oracle
 ```
+# Interoperability Oracle
+$ python3 src/interoracle.py -i [] -o [oracle_bug_output_dir] -r [reference_browser_path]
+
+# Non-feature-update Oracle
+$ python3 src/nfuoracle.py -i [oracle_bug_output_dir] -b [browser_pathfile] -r [reference_browser_path]
 ```
 - Rendering Pipeline Analysis
 ```
@@ -107,9 +109,19 @@ $ python3 src/bisector.py -i ./testenv1/change_detector -o ./testenv1/bisect -j 
 #### Test Environment 1
 - To reproduce the result of 6.3, please run the following command:
 ```
-$ python3 
+# Interoperability Oracle
+$ python3 repro.py -i [] -o [] -r ./firefox/82.0/firefox -m interoracle
+
+
+# Non-feature-update Oracle
+$ ./wpt make-hosts-file | sudo tee -a /etc/hosts
+$ python3 src/nfuoracle.py -i [] -b [] -r ./firefox/82.0/firefox
+```
+
+### 6.4 Correctness of Rendering Pipeline Analysis
+- To reproduce the result of 6.4, please run the following command:
 ```
 
 
-### 6.4 Correctness of Rendering Pipeline Analysis
+```
 
