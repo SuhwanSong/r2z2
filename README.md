@@ -34,13 +34,14 @@ python3 src/bisector.py -i [candidate_output_dir] -o [bisect_output_dir]
 - Regression Oracle
 ```
 # Interoperability Oracle
-$ python3 src/interoracle.py -i [] -o [oracle_bug_output_dir] -r [reference_browser_path]
+$ python3 src/interoracle.py -i [] -o [inter_oracle_output_dir] -r [ref_browser_path]
 
 # Non-feature-update Oracle
-$ python3 src/nfuoracle.py -i [oracle_bug_output_dir] -b [browser_pathfile] -r [reference_browser_path]
+$ python3 src/nfuoracle.py -i [inter_oracle_output_dir] -o [] -b [browser_pathfile] -r [ref_browser_path]
 ```
 - Rendering Pipeline Analysis
 ```
+$ python3 src/analyzer.py -i [] -o [analysis_output_dir]
 ```
 
 ## Reproduction
