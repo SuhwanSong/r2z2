@@ -1,5 +1,14 @@
  # R2Z2: Detecting Rendering Regressions in Web Browsers through Differential Fuzz Testing
+ 
+## Table
+1. [Environment](#Environment)
+2. [Setup](#Setup)
+3. [Usage](#Usage)
+4. [Reproduction](#Reproduction)
 
+## Environment
+- Ubuntu 18.04 64bit
+- 
 ## Setup
 
 The bash file `setup.sh` will install and download all of dependencies for r2z2.
@@ -8,6 +17,29 @@ The bash file `setup.sh` will install and download all of dependencies for r2z2.
 $ ./setup.sh
 ```
 
+## Usage
+
+- Seed Generation
+```
+```
+
+- Change Detector
+```
+python3 src/r2z2.py -i [seed_dir] -o [candidate_output_dir] -b [browser_pathfile]
+```
+- Bisect Analysis
+```
+python3 src/bisector.py -i [candidate_output_dir] -o [bisect_output_dir]
+```
+- Minimizer
+```
+```
+- Regression Oracle
+```
+```
+- Rendering Pipeline Analysis
+```
+```
 
 ## Reproduction
 
