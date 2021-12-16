@@ -5,6 +5,7 @@
 2. [Setup](#Setup)
 3. [Usage](#Usage)
 4. [Reproduction](#Reproduction)
+5. [Publication](#Publication)
 
 ## Environment
 - Ubuntu 18.04 64bit
@@ -19,34 +20,39 @@ $ ./setup.sh
 
 ## Usage
 
+```
+# Change Detector
+$ ./script.py -i [seed_dir] -o [candidate_output_dir] -b [browser_pathfile] -m fuzz
 
-- Change Detector
-```
-./script.py -i [seed_dir] -o [candidate_output_dir] -b [browser_pathfile] -m fuzz
-```
+# Bisect Analysis
+$ ./script.py -i [candidate_output_dir] -o [bisect_output_dir] -b [browser_pathfile] -m bisect
 
-- Bisect Analysis
-```
-./script.py -i [candidate_output_dir] -o [bisect_output_dir] -b [browser_pathfile] -m bisect
-```
-- Minimizer
-```
- ./script.py -i [bisect_output_dir] -o [minimize_output_dir] -m minimize
-```
-- Regression Oracle
-```
+# Minimizer
+$ ./script.py -i [bisect_output_dir] -o [minimize_output_dir] -m minimize
+
 # Interoperability Oracle
 $ ./script.py -i [minimize_output_dir] -o [inter_oracle_output_dir] -r [ref_browser_path] -m interoracle
 
 # Non-feature-update Oracle
 $ ./script.py -i [inter_oracle_output_dir] -o [oracle_output_dir] -b [browser_pathfile] -r [ref_browser_path] -m nonoracle
-```
-- Rendering Pipeline Analysis
-```
+
+# Rendering Pipeline Analysis
 $ ./script.py -i [oracle_output_dir] -o [analysis_output_dir] -m pipeline
+
+# Options
+#   -i: input directory
+#   -o: output directory
+#   -b: file containing target browser paths
+#   -r: reference browser path
+#   -m: mode
 ```
 
 ## Reproduction
+
+### Setup
+```shell
+$ ./setup.sh repro
+```
 
 ### 6.1 Effectiveness of Change Detection
 
@@ -128,3 +134,5 @@ $ python3 src/nfuoracle.py -i [] -b [] -r ./firefox/82.0/firefox
 
 ```
 
+
+## Publication
