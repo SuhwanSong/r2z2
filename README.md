@@ -22,26 +22,28 @@ $ ./setup.sh
 
 - Change Detector
 ```
-python3 src/r2z2.py -i [seed_dir] -o [candidate_output_dir] -b [browser_pathfile]
+./script.py -i [seed_dir] -o [candidate_output_dir] -b [browser_pathfile] -m fuzz
 ```
+
 - Bisect Analysis
 ```
-python3 src/bisector.py -i [candidate_output_dir] -o [bisect_output_dir]
+./script.py -i [candidate_output_dir] -o [bisect_output_dir] -b [browser_pathfile] -m bisect
 ```
 - Minimizer
 ```
+ ./script.py -i [bisect_output_dir] -o [minimize_output_dir] -m minimize
 ```
 - Regression Oracle
 ```
 # Interoperability Oracle
-$ python3 src/interoracle.py -i [] -o [inter_oracle_output_dir] -r [ref_browser_path]
+$ ./script.py -i [minimize_output_dir] -o [inter_oracle_output_dir] -r [ref_browser_path] -m interoracle
 
 # Non-feature-update Oracle
-$ python3 src/nfuoracle.py -i [inter_oracle_output_dir] -o [] -b [browser_pathfile] -r [ref_browser_path]
+$ ./script.py -i [inter_oracle_output_dir] -o [oracle_output_dir] -b [browser_pathfile] -r [ref_browser_path] -m nonoracle
 ```
 - Rendering Pipeline Analysis
 ```
-$ python3 src/analyzer.py -i [] -o [analysis_output_dir]
+$ ./script.py -i [oracle_output_dir] -o [analysis_output_dir] -m pipeline
 ```
 
 ## Reproduction
