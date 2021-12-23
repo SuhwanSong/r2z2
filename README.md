@@ -84,22 +84,20 @@ $ ./script.py -i [oracle_output_dir] -o [analysis_output_dir] -m pipeline
 ## Reproduction
 
 ### 6.1 Effectiveness of Change Detection
-
-#### Test Environment 1
-
-- To reproduce the result of 6.1, please run the following command:
+- To reproduce the result of test environment 1, please run the commands below.
+- For test environment 2, please change "testenv1" to "testenv2" in the commands and run them.
 ```
-$ python3 src/r2z2.py -i ./testenv1/seeds -o ./testenv1/change_detector -b ./testenv1/chrome_vers.txt -j 24
+$ mkdir eval_result_testenv1
+$ ./script.py -i ./r2z2_data/seeds/testenv1 -o ./eval_result_testenv1/6.1 -b ./r2z2_data/testenv1.txt -m fuzz
 ```
 
-- The directory `./testenv1/seeds` has 200K HTML inputs used in the paper.
-- The directory `./testenv1/change_detector/` includes the 
-candidate html files found by R2Z2, e.g., `thread-00/id:000000_BUG.html`
-- It also includes `fuzz_log.txt` file, which recorded the number of tested HTML 
-files and candidate html files over the time during fuzzing.
-- To check the result, please run the following command: 
+- The directory `./r2z2_data/seeds/testenv1` has 200K HTML inputs used in the paper.
+- The directory `./eval_result_testenv1/6.1` includes the candidate html files found by R2Z2, e.g., `thread-00/id:000000_BUG.html`
+- It also includes `fuzz_log.txt` file, which recorded the number of tested HTML files and candidate html files over the time during fuzzing.
+- To check the result, please run the following command.
 ```
-$ cat ./testenv1/change_detector/fuzz_log.txt
+# It found 6785 candidates from 200K inputs for 6306 seconds.
+$ cat ./eval_result_testenv1/6.1/fuzz_log.txt
 Time(s), Tested HTMLs, CandBug
 0.010046958923339844, 0, 0
 
@@ -108,53 +106,52 @@ Time(s), Tested HTMLs, CandBug
 6306.686718702316, 199998, 6785
 ```
 
-
-
-#### Test Environment 2
-
-- To reproduce the result of 6.1, please run the following command:
-```
-$ python3 src/r2z2.py -i ./testenv2/seeds -o ./testenv2/change_detector -b ./testenv2/chrome_vers.txt -j 24
-```
-
-- The directory `./testenv2/seeds` has 200K HTML inputs used in the paper.
-- The directory `./testenv2/change_detector/` includes the 
-candidate html files found by R2Z2, e.g., `thread-00/id:000000_BUG.html`
-- It also includes `fuzz_log.txt` file, which recorded the number of tested HTML 
-files and candidate html files over the time during fuzzing.
-- To check the result, please run the following command: 
-```
-$ cat ./testenv2/change_detector/fuzz_log.txt
-Time(s), Tested HTMLs, CandBug
-0.01497030258178711, 0, 0
-
-...
-
-8418.58963561058, 200000, 16205
-```
-
 ### 6.2 Effectiveness of Bisect Analysis
-
-#### Test Environment 1
-- To reproduce the result of 6.2, please run the following command:
+- To reproduce the result of test environment 1, please run the commands below.
+- For test environment 2, please change "testenv1" to "testenv2" in the commands and run them.
 ```
-$ python3 src/bisector.py -i ./testenv1/change_detector -o ./testenv1/bisect -j 18 --download -s 766000 -e 784091
+$ ./script.py -i ./eval_result_testenv1/6.1 -o ./eval_result_testenv1/6.2 -b ./r2z2_data/testenv1.txt -m bisect
+```
+- The directory `./eval_result_testenv1/6.2` includes the successfully bisected candidate html files. 
+- They are classified by their culprit commit (`B*`).  
+- The `bisected_list.txt` file shows the list of the successfully bisected candidate html files.
+- The `commit_info.txt` file is in each culprit commit directory, and it indicates the two different versions of browser (i.e., `A*` and `B*`)
+- To check the number of bisected candidate html files, please run the following command. 
+```
+$ cat ./eval_result_testenv1/6.2/bisected_list.txt | wc -l
+6643
 ```
 
 
 ### 6.3 Effectiveness of Regression Oracle
-
-#### Test Environment 1
-- To reproduce the result of 6.3, please run the following command:
+- To reproduce the result of test environment 1, please run the commands below.
+- For test environment 2, please change "testenv1" to "testenv2" in the commands and run them.
 ```
-# Interoperability Oracle
-$ python3 repro.py -i [] -o [] -r ./firefox/82.0/firefox -m interoracle
+# Minimizer
+$ ./script.py -i ./eval_result_testenv1/6.2 -o ./eval_result_testenv1/6.2_min -m minimize
 
+# Interoperability oracle
+$ ./script.py -i ./eval_result_testenv1/6.2_min -o ./eval_result_testenv1/6.3_interoracle -r ./firefox/82.0/firefox -m interoracle
 
 # Non-feature-update Oracle
+$ cd tools/wpt
 $ ./wpt make-hosts-file | sudo tee -a /etc/hosts
-$ python3 src/nfuoracle.py -i [] -b [] -r ./firefox/82.0/firefox
+$ cd ../../
+$ ./script.py -i ./eval_result_testenv1/6.3_interoracle -o ./eval_result_testenv1/6.3 -b ./r2z2_data/testenv1.txt -r ./firefox/82.0/firefox -m nonoracle
 ```
+- The directory `./eval_result_testenv1/6.3` includes the regression oracle bugs.
+- They are classified by their culprit commit (i.e. `B*`).
+- You can check PoC files in `./eval_result_testenv1/6.3` directory.
+```
+# Example
+$ cat ./eval_result_testenv1/6.3/780992/id:000001.html
+<html><head><style>
+#htmlvar00002, .class6 { content: url(data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7);
+</style>
+</head><body><input id="htmlvar00002" type="image">
+</body></html>
+```
+
 
 ### 6.4 Correctness of Rendering Pipeline Analysis
 - To reproduce the result of 6.4, please run the following command:
