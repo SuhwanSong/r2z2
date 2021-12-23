@@ -11,12 +11,12 @@
 - Ubuntu 18.04 64bit
 
 ## Setup
-You need to install the dependencies of R2Z2, and then
+- You need to install the dependencies of R2Z2, and then
 download target browsers and reference browser with their drivers. 
 
-Each driver should be placed in the same directory of browser binary.
+- Each driver should be placed in the same directory of browser binary.
 
-The bash file `setup.sh` will install all of dependencies and download the browsers.
+- The bash file `setup.sh` will install all of dependencies and download the browsers.
 ```shell
 $ ./setup.sh 
 ```
@@ -32,8 +32,12 @@ You can easily run R2Z2 using `scripy.py`. The explanation of options is as foll
 #   -m: mode
 ```
 
+####  0. Seed Generation
+- You need to generate the html files for the test. 
+- Please refer to [domato fuzzer](https://github.com/googleprojectzero/domato) to generate them.
+
 ####  1. Change Detector 
-- The change detector finds the candidate html bugs from the seeds html files.
+- The change detector finds the candidate html bugs from the seeds.
 - You should provide the paths of target browser to the "browser_pathfile".
 ```
 # Example
@@ -78,11 +82,6 @@ $ ./script.py -i [oracle_output_dir] -o [analysis_output_dir] -m pipeline
 ```
 
 ## Reproduction
-
-### Setup
-```shell
-$ ./setup.sh repro
-```
 
 ### 6.1 Effectiveness of Change Detection
 
