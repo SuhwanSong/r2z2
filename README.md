@@ -11,40 +11,70 @@
 - Ubuntu 18.04 64bit
 
 ## Setup
+You need to install the dependencies of R2Z2, and then
+download target browsers and reference browser with their drivers. 
 
-The bash file `setup.sh` will install and download all of dependencies for r2z2.
- 
+Each driver should be placed in the same directory of browser binary.
+
+The bash file `setup.sh` will install all of dependencies and download the browsers.
 ```shell
-$ ./setup.sh
+$ ./setup.sh 
 ```
 
 ## Usage
-
+You can easily run R2Z2 using `scripy.py`. The explanation of options is as follows. 
 ```
-# Change Detector
-$ ./script.py -i [seed_dir] -o [candidate_output_dir] -b [browser_pathfile] -m fuzz
-
-# Bisect Analysis
-$ ./script.py -i [candidate_output_dir] -o [bisect_output_dir] -b [browser_pathfile] -m bisect
-
-# Minimizer
-$ ./script.py -i [bisect_output_dir] -o [minimize_output_dir] -m minimize
-
-# Interoperability Oracle
-$ ./script.py -i [minimize_output_dir] -o [inter_oracle_output_dir] -r [ref_browser_path] -m interoracle
-
-# Non-feature-update Oracle
-$ ./script.py -i [inter_oracle_output_dir] -o [oracle_output_dir] -b [browser_pathfile] -r [ref_browser_path] -m nonoracle
-
-# Rendering Pipeline Analysis
-$ ./script.py -i [oracle_output_dir] -o [analysis_output_dir] -m pipeline
-
 # Options
 #   -i: input directory
 #   -o: output directory
 #   -b: file containing target browser paths
 #   -r: reference browser path
 #   -m: mode
+```
+
+####  1. Change Detector 
+- The change detector finds the candidate html bugs from the seeds html files.
+- You should provide the paths of target browser to the "browser_pathfile".
+```
+# Example
+$ cat browser_pathfile
+./chrome/766000/chrome
+./chrome/784091/chrome
+```
+- After that, you can run the change detector using following command.
+```
+$ ./script.py -i [seed_dir] -o [candidate_output_dir] -b [browser_pathfile] -m fuzz
+```
+
+#### 2. Bisect Analysis
+- The bisect analyzer pin-points the culprit commit of each candidate html bug.
+- As you need to download and build many versions of chrome browser, it will take a lot of time.
+```
+$ ./script.py -i [candidate_output_dir] -o [bisect_output_dir] -b [browser_pathfile] -m bisect
+```
+
+#### 3. Minimizer
+- The minimizer minimizes the size of candidate html bugs.
+```
+$ ./script.py -i [bisect_output_dir] -o [minimize_output_dir] -m minimize
+```
+
+#### 4. Interoperability Oracle
+- The interoperability oracle leverages the reference browser to discover oracle bugs from the candidate bugs.
+```
+$ ./script.py -i [minimize_output_dir] -o [inter_oracle_output_dir] -r [ref_browser_path] -m interoracle
+```
+
+#### 5. Non-feature-update Oracle
+- The non-feature-update oracle leverages web-platform-tests to filter out the false positives from oracle bugs. 
+```
+$ ./script.py -i [inter_oracle_output_dir] -o [oracle_output_dir] -b [browser_pathfile] -r [ref_browser_path] -m nonoracle
+```
+
+#### 6. Rendering Pipeline Analysis
+- The rendering pipeline analysis identifies the culprit stage of oracle bug and provides the diff information.
+```
+$ ./script.py -i [oracle_output_dir] -o [analysis_output_dir] -m pipeline
 ```
 
 ## Reproduction
