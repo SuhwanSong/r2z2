@@ -1,0 +1,11 @@
+# Set build arguments here. See `gn help buildargs`.
+#is_asan = true
+#sanitizer_coverage_flags = "trace-pc-guard"
+#use_afl = true
+is_debug = false
+enable_nacl = false
+dcheck_always_on = true
+#is_component_build = true
+cc_wrapper="ccache"
+#optimize_for_fuzzing = true # Optimize for coverage guided fuzzing (balance between speed and number of branches). Can be also used to remove non-determinism and other issues.
+#optimize_webui = true 

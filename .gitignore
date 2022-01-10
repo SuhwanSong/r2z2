@@ -1,0 +1,9 @@
+chrome/
+firefox/
+tools/depot_tools
+tools/wpt
+__pycache__/
+testenv1
+testenv2
+*.txt
+*.log
