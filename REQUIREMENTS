@@ -1,0 +1,5 @@
+- OS: Ubuntu 18.04 64bit
+- CPU: x86-64
+- Memory: larger than 64GB RAM 
+- Storage: larger than 5TB
+- Softwares :Python3, Selenium Library, Chrome, Firefox

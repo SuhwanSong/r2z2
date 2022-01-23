@@ -20,6 +20,8 @@
 - Each driver should be placed in the same directory of browser binary.
 - The bash file `setup.sh` will install all of dependencies and download the browsers.
 ```shell
+$ git clone https://github.com/SuhwanSong/r2z2.git
+$ cd r2z2
 $ ./setup.sh 
 ``` 
 
